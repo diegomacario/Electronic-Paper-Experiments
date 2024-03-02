@@ -1,5 +1,13 @@
-# Weather Display Sample
+# LilyGo-EPD-4-7-OWM-Weather-Display
 
-For copyright reasons, the weather application is no longer included with the SDK; the code is still available, you can find the source code at 
-- [t5-4.7-plus Weather Display](https://github.com/Xinyuan-LilyGO/LilyGo-EPD-4-7-OWM-Weather-Display/tree/web)
-- [t5-4.7 Weather Display](https://github.com/Xinyuan-LilyGO/LilyGo-EPD-4-7-OWM-Weather-Display/tree/main)
+[How to get started quickly](https://youtu.be/bTdW0QTEK70)
+
+# FAQ
+
+1. After flash is completed, burning cannot continue. Please put the device into download mode.
+   1. Connect the board via the USB cable
+   2. Press and hold the BOOT(**IO0**) button , While still pressing the BOOT(**IO0**) button, press **REST**
+   3. Release the **REST**
+   4. Release the BOOT(**IO0**) button
+   5. Upload sketch
+

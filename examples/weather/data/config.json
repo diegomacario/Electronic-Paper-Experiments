@@ -1,0 +1,22 @@
+{
+	"WLAN": {
+		"ssid": "",
+		"password": ""
+	},
+	"OpenWeather": {
+		"apikey": "",
+		"server": "api.openweathermap.org",
+		"country": "CA",
+		"city": "montreal",
+		"hemisphere": "north",
+		"units": "M"
+	},
+	"ntp": {
+		"server": "0.asia.pool.ntp.org",
+		"timezone": ""
+	},
+	"schedule_power": {
+		"on_time": "17:42",
+		"off_time": "17:42"
+	}
+}
