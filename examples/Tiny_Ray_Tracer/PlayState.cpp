@@ -36,7 +36,7 @@ PlayState::PlayState(const std::shared_ptr<FiniteStateMachine>& finiteStateMachi
 
 void PlayState::enter()
 {
-   mFileParser.reset(new FileParser(sceneDescriptions[0]));
+   mFileParser.reset(new FileParser(sceneDescriptions[8]));
    mFileParser->readFile(mSceneDesc, mScene);
 
    mSampleGenerator = RandomSampleGenerator(mSceneDesc->getWidth(), mSceneDesc->getHeight());
@@ -54,11 +54,21 @@ void PlayState::enter()
    //mAmoled->pushColors(0, 0, mScreenWidth, mScreenHeight, (uint16_t *)mImageRenderingSprite.getPointer());
 }
 
+bool done = false;
+
 void PlayState::update()
 {
    epd_poweron();
 
-   for (int i = 0; i < 960; ++i) {
+   if (done) {
+      epd_draw_grayscale_image(epd_full_screen(), mImageRenderingFramebuffer);
+      delay(5000);
+      epd_clear();
+      epd_poweroff();
+      return;
+   }
+
+   for (int i = 0; i < 960 * 10; ++i) {
       if (mSampleGenerator.sampleIsAvailable())
       {
          mSampleGenerator.generateSample(mSample);
@@ -75,13 +85,19 @@ void PlayState::update()
             float vG = pixelColour.g;
             float vB = pixelColour.b;
 
-            float Y = (0.2126f * sRGBtoLin(vR) + 0.7152f * sRGBtoLin(vG) + 0.0722f * sRGBtoLin(vB));
-
-            uint8_t luminance = static_cast<uint8_t>(std::min(255 * Y, 255.0f));
+            //float Y = (0.2126f * sRGBtoLin(vR) + 0.7152f * sRGBtoLin(vG) + 0.0722f * sRGBtoLin(vB));
+            //uint8_t luminance = static_cast<uint8_t>(std::min(255 * Y, 255.0f));
             // uint8_t luminance = 0;
+            //epd_draw_pixel(mSample.x, mSample.y, luminance, mImageRenderingFramebuffer);
 
-            epd_draw_pixel(mSample.x, mSample.y, luminance, mImageRenderingFramebuffer);
+            float gray = 0.2989f * vR + 0.5870f * vG + 0.1140f * vB;
+            uint8_t gray2 = static_cast<uint8_t>(std::min(255.0f * gray, 255.0f));
+            epd_draw_pixel(mSample.x, mSample.y, gray, mImageRenderingFramebuffer);
+         } else {
+            //epd_draw_pixel(mSample.x, mSample.y, 0, mImageRenderingFramebuffer);
          }
+      } else {
+         done = true;
       }
    }
 
