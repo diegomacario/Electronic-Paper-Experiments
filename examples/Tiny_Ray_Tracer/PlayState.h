@@ -45,6 +45,8 @@ private:
    Sample                              mSample;
    Ray                                 mRay;
    Intersection                        mIntersection;
+
+   int                                 mQuadrantIndex;
 };
 
 #endif

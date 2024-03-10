@@ -26,6 +26,7 @@ PlayState::PlayState(const std::shared_ptr<FiniteStateMachine>& finiteStateMachi
    , mFileParser(nullptr)
    , mSceneDesc(nullptr)
    , mScene(nullptr)
+   , mQuadrantIndex(0)
 {
    mImageRenderingFramebuffer = (uint8_t *)heap_caps_malloc(mScreenWidth * mScreenHeight / 2, MALLOC_CAP_SPIRAM);
    if (!mImageRenderingFramebuffer) {
@@ -58,6 +59,19 @@ bool done = false;
 
 void PlayState::update()
 {
+   if (mQuadrantIndex <= 4) {
+      if (mQuadrantIndex <= 3) {
+         mSampleGenerator.generateCoordinates(mQuadrantIndex);   
+      }
+      else {
+         mSampleGenerator.shuffleCoordinates();
+      }
+
+      ++mQuadrantIndex;
+
+      return;
+   }
+
    epd_poweron();
 
    if (done) {
