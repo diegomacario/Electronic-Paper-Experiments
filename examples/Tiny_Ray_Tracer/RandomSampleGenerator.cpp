@@ -28,7 +28,7 @@ void RandomSampleGenerator::generateCoordinates(int quadrantIndex)
 {
    switch (quadrantIndex) {
    case 0: // Top left
-      std::cout << "Generate coordinates of top left corner" << '\n';
+      std::cout << "Generate coordinates of top left quadrant" << '\n';
       int halfWidth = width / 2;
       int halfHeight = height / 2;
       for (int i = 0; i < halfWidth; ++i) {
@@ -38,7 +38,7 @@ void RandomSampleGenerator::generateCoordinates(int quadrantIndex)
       }
       break;
    case 1: // Top right
-      std::cout << "Generate coordinates of top right corner" << '\n';
+      std::cout << "Generate coordinates of top right quadrant" << '\n';
       int halfWidth = width / 2;
       int halfHeight = height / 2;
       for (int i = halfWidth; i < width; ++i) {
@@ -48,7 +48,7 @@ void RandomSampleGenerator::generateCoordinates(int quadrantIndex)
       }
       break;
    case 2: // Bottom left
-      std::cout << "Generate coordinates of bottom left corner" << '\n';
+      std::cout << "Generate coordinates of bottom left quadrant" << '\n';
       int halfWidth = width / 2;
       int halfHeight = height / 2;
       for (int i = 0; i < halfWidth; ++i) {
@@ -58,7 +58,7 @@ void RandomSampleGenerator::generateCoordinates(int quadrantIndex)
       }
       break;
    case 3: // Bottom right
-      std::cout << "Generate coordinates of bottom right corner" << '\n';
+      std::cout << "Generate coordinates of bottom right quadrant" << '\n';
       int halfWidth = width / 2;
       int halfHeight = height / 2;
       for (int i = halfWidth; i < width; ++i) {

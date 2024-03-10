@@ -30,12 +30,15 @@ public:
 
 private:
 
+   void generateNoise(int quadrantIndex);
+
    std::shared_ptr<FiniteStateMachine> mFSM;
 
    const uint16_t                      mScreenWidth;
    const uint16_t                      mScreenHeight;
 
    uint8_t*                            mImageRenderingFramebuffer;
+   uint8_t*                            mNoiseFramebuffer;
 
    std::unique_ptr<FileParser>         mFileParser;
    std::unique_ptr<SceneDescription>   mSceneDesc;
@@ -47,6 +50,9 @@ private:
    Intersection                        mIntersection;
 
    int                                 mQuadrantIndex;
+
+   bool                                mGenerateCoordinatesOfQuadrants;
+   bool                                mGenerateNoiseOfQuadrants;
 };
 
 #endif

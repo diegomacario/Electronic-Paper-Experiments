@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <Arduino.h>
 #include "epd_driver.h"
 #include "pins.h"
@@ -27,12 +29,24 @@ PlayState::PlayState(const std::shared_ptr<FiniteStateMachine>& finiteStateMachi
    , mSceneDesc(nullptr)
    , mScene(nullptr)
    , mQuadrantIndex(0)
+   , mGenerateCoordinatesOfQuadrants(true)
+   , mGenerateNoiseOfQuadrants(false)
 {
    mImageRenderingFramebuffer = (uint8_t *)heap_caps_malloc(mScreenWidth * mScreenHeight / 2, MALLOC_CAP_SPIRAM);
+
    if (!mImageRenderingFramebuffer) {
         Serial.println("Memory allocation failed!");
    }
+
    memset(mImageRenderingFramebuffer, 0xFF, EPD_WIDTH * EPD_HEIGHT / 2);
+
+   mNoiseFramebuffer = (uint8_t *)heap_caps_malloc(mScreenWidth * mScreenHeight / 2, MALLOC_CAP_SPIRAM);
+
+   if (!mNoiseFramebuffer) {
+        Serial.println("Memory allocation failed!");
+   }
+   
+   memset(mNoiseFramebuffer, 0xFF, EPD_WIDTH * EPD_HEIGHT / 2);
 }
 
 void PlayState::enter()
@@ -51,23 +65,37 @@ void PlayState::enter()
 
    mRay.origin = mSceneDesc->getEye();
    mRay.direction = Vector(0, 0, 0);
-
-   //mAmoled->pushColors(0, 0, mScreenWidth, mScreenHeight, (uint16_t *)mImageRenderingSprite.getPointer());
 }
 
 bool done = false;
 
 void PlayState::update()
 {
-   if (mQuadrantIndex <= 4) {
-      if (mQuadrantIndex <= 3) {
-         mSampleGenerator.generateCoordinates(mQuadrantIndex);   
-      }
-      else {
-         mSampleGenerator.shuffleCoordinates();
-      }
+   if (mGenerateCoordinatesOfQuadrants) {
+      if (mQuadrantIndex <= 4) {
+         if (mQuadrantIndex <= 3) {
+            mSampleGenerator.generateCoordinates(mQuadrantIndex);
+            ++mQuadrantIndex;
+         }
+         else {
+            mSampleGenerator.shuffleCoordinates();
+            mQuadrantIndex = 0;
+            mGenerateCoordinatesOfQuadrants = false;
+            mGenerateNoiseOfQuadrants = true;
+         }
 
-      ++mQuadrantIndex;
+         return;
+      }
+   } else if (mGenerateNoiseOfQuadrants) {
+      if (mQuadrantIndex <= 3) {
+         mSampleGenerator.generateCoordinates(mQuadrantIndex);
+
+         if (mQuadrantIndex == 3) {
+            mGenerateNoiseOfQuadrants = false;
+         }
+
+         ++mQuadrantIndex;
+      }
 
       return;
    }
@@ -130,4 +158,56 @@ void PlayState::update()
 void PlayState::exit()
 {
 
+}
+
+void PlayState::generateNoise(int quadrantIndex)
+{
+   switch (quadrantIndex) {
+   case 0: // Top left
+      std::cout << "Generate noise of top left quadrant" << '\n';
+      int halfWidth = mScreenWidth / 2;
+      int halfHeight = mScreenHeight / 2;
+      for (int32_t i = 0; i < halfWidth; ++i) {
+         for (int32_t j = 0; j < halfHeight; ++j) {
+            uint8_t value = random(255);
+            epd_draw_pixel(i, j, value, mNoiseFramebuffer);
+         }
+      }
+      break;
+   case 1: // Top right
+      std::cout << "Generate noise of top right quadrant" << '\n';
+      int halfWidth = mScreenWidth / 2;
+      int halfHeight = mScreenHeight / 2;
+      for (int32_t i = halfWidth; i < mScreenWidth; ++i) {
+         for (int32_t j = 0; j < halfHeight; ++j) {
+            uint8_t value = random(255);
+            epd_draw_pixel(i, j, value, mNoiseFramebuffer);
+         }
+      }
+      break;
+   case 2: // Bottom left
+      std::cout << "Generate noise of bottom left quadrant" << '\n';
+      int halfWidth = mScreenWidth / 2;
+      int halfHeight = mScreenHeight / 2;
+      for (int32_t i = 0; i < halfWidth; ++i) {
+         for (int32_t j = halfHeight; j < mScreenHeight; ++j) {
+            uint8_t value = random(255);
+            epd_draw_pixel(i, j, value, mNoiseFramebuffer);
+         }
+      }
+      break;
+   case 3: // Bottom right
+      std::cout << "Generate noise of bottom right quadrant" << '\n';
+      int halfWidth = mScreenWidth / 2;
+      int halfHeight = mScreenHeight / 2;
+      for (int32_t i = halfWidth; i < mScreenWidth; ++i) {
+         for (int32_t j = halfHeight; j < mScreenHeight; ++j) {
+            uint8_t value = random(255);
+            epd_draw_pixel(i, j, value, mNoiseFramebuffer);
+         }
+      }
+      break;
+   default:
+      break;
+   }
 }
