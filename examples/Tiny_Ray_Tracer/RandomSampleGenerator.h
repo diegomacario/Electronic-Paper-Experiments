@@ -38,6 +38,8 @@ private:
    std::vector<std::pair<int, int>>::iterator currentCoordinate;
 
    unsigned int numSamplesGenerated;
+
+   unsigned int x, y;
 };
 
 #endif

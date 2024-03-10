@@ -21,7 +21,7 @@ Description:
 std::vector<std::string> sceneDescriptions = {
 // Sword
 R"(
-size 536 240
+size 960 540
 output sword.png
 
 # --- --- --- --- -- CAMERA -- --- --- --- ---

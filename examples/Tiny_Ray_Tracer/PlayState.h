@@ -35,6 +35,8 @@ private:
    const uint16_t                      mScreenWidth;
    const uint16_t                      mScreenHeight;
 
+   uint8_t*                            mImageRenderingFramebuffer;
+
    std::unique_ptr<FileParser>         mFileParser;
    std::unique_ptr<SceneDescription>   mSceneDesc;
    std::unique_ptr<Scene>              mScene;
