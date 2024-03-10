@@ -23,6 +23,10 @@ public:
    RandomSampleGenerator(const int width, const int height);
    ~RandomSampleGenerator();
 
+   void generateCoordinates(int quadrantIndex);
+
+   void shuffleCoordinates();
+
    void generateSample(Sample& sample);
 
    bool sampleIsAvailable();
@@ -38,8 +42,6 @@ private:
    std::vector<std::pair<int, int>>::iterator currentCoordinate;
 
    unsigned int numSamplesGenerated;
-
-   unsigned int x, y;
 };
 
 #endif
