@@ -110,7 +110,7 @@ void PlayState::update()
       return;
    }
 
-   for (int i = 0; i < 960 * 10; ++i) {
+   for (int i = 0; i < 960; ++i) {
       if (mSampleGenerator.sampleIsAvailable())
       {
          mSampleGenerator.generateSample(mSample);
@@ -148,7 +148,7 @@ void PlayState::update()
 
    //Serial.println("Done with row!");
 
-   epd_draw_grayscale_image(epd_full_screen(), mImageRenderingFramebuffer);
+   //epd_draw_grayscale_image(epd_full_screen(), mImageRenderingFramebuffer);
    delay(1000);
    //memset(mImageRenderingFramebuffer, 0xFF, EPD_WIDTH * EPD_HEIGHT / 2);
    epd_clear();
@@ -162,11 +162,12 @@ void PlayState::exit()
 
 void PlayState::generateNoise(int quadrantIndex)
 {
+   int halfWidth = mScreenWidth / 2;
+   int halfHeight = mScreenHeight / 2;
+
    switch (quadrantIndex) {
    case 0: // Top left
-      std::cout << "Generate noise of top left quadrant" << '\n';
-      int halfWidth = mScreenWidth / 2;
-      int halfHeight = mScreenHeight / 2;
+      std::cout << "0 - Generate noise of top left quadrant" << '\n';
       for (int32_t i = 0; i < halfWidth; ++i) {
          for (int32_t j = 0; j < halfHeight; ++j) {
             uint8_t value = random(255);
@@ -175,9 +176,7 @@ void PlayState::generateNoise(int quadrantIndex)
       }
       break;
    case 1: // Top right
-      std::cout << "Generate noise of top right quadrant" << '\n';
-      int halfWidth = mScreenWidth / 2;
-      int halfHeight = mScreenHeight / 2;
+      std::cout << "1 - Generate noise of top right quadrant" << '\n';
       for (int32_t i = halfWidth; i < mScreenWidth; ++i) {
          for (int32_t j = 0; j < halfHeight; ++j) {
             uint8_t value = random(255);
@@ -186,9 +185,7 @@ void PlayState::generateNoise(int quadrantIndex)
       }
       break;
    case 2: // Bottom left
-      std::cout << "Generate noise of bottom left quadrant" << '\n';
-      int halfWidth = mScreenWidth / 2;
-      int halfHeight = mScreenHeight / 2;
+      std::cout << "2 - Generate noise of bottom left quadrant" << '\n';
       for (int32_t i = 0; i < halfWidth; ++i) {
          for (int32_t j = halfHeight; j < mScreenHeight; ++j) {
             uint8_t value = random(255);
@@ -197,9 +194,7 @@ void PlayState::generateNoise(int quadrantIndex)
       }
       break;
    case 3: // Bottom right
-      std::cout << "Generate noise of bottom right quadrant" << '\n';
-      int halfWidth = mScreenWidth / 2;
-      int halfHeight = mScreenHeight / 2;
+      std::cout << "3 - Generate noise of bottom right quadrant" << '\n';
       for (int32_t i = halfWidth; i < mScreenWidth; ++i) {
          for (int32_t j = halfHeight; j < mScreenHeight; ++j) {
             uint8_t value = random(255);

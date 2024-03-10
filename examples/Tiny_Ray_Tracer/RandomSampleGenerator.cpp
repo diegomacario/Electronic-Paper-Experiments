@@ -26,11 +26,12 @@ RandomSampleGenerator::~RandomSampleGenerator()
 
 void RandomSampleGenerator::generateCoordinates(int quadrantIndex)
 {
+   int halfWidth = width / 2;
+   int halfHeight = height / 2;
+
    switch (quadrantIndex) {
    case 0: // Top left
-      std::cout << "Generate coordinates of top left quadrant" << '\n';
-      int halfWidth = width / 2;
-      int halfHeight = height / 2;
+      std::cout << "0 - Generate coordinates of top left quadrant" << '\n';
       for (int i = 0; i < halfWidth; ++i) {
          for (int j = 0; j < halfHeight; ++j) {
             coordinates.push_back({i, j});
@@ -38,9 +39,7 @@ void RandomSampleGenerator::generateCoordinates(int quadrantIndex)
       }
       break;
    case 1: // Top right
-      std::cout << "Generate coordinates of top right quadrant" << '\n';
-      int halfWidth = width / 2;
-      int halfHeight = height / 2;
+      std::cout << "1 - Generate coordinates of top right quadrant" << '\n';
       for (int i = halfWidth; i < width; ++i) {
          for (int j = 0; j < halfHeight; ++j) {
             coordinates.push_back({i, j});
@@ -48,9 +47,7 @@ void RandomSampleGenerator::generateCoordinates(int quadrantIndex)
       }
       break;
    case 2: // Bottom left
-      std::cout << "Generate coordinates of bottom left quadrant" << '\n';
-      int halfWidth = width / 2;
-      int halfHeight = height / 2;
+      std::cout << "2 - Generate coordinates of bottom left quadrant" << '\n';
       for (int i = 0; i < halfWidth; ++i) {
          for (int j = halfHeight; j < height; ++j) {
             coordinates.push_back({i, j});
@@ -58,9 +55,7 @@ void RandomSampleGenerator::generateCoordinates(int quadrantIndex)
       }
       break;
    case 3: // Bottom right
-      std::cout << "Generate coordinates of bottom right quadrant" << '\n';
-      int halfWidth = width / 2;
-      int halfHeight = height / 2;
+      std::cout << "3 - Generate coordinates of bottom right quadrant" << '\n';
       for (int i = halfWidth; i < width; ++i) {
          for (int j = halfHeight; j < height; ++j) {
             coordinates.push_back({i, j});
