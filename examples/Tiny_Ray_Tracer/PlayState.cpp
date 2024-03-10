@@ -92,7 +92,10 @@ void PlayState::update()
 
             float gray = 0.2989f * vR + 0.5870f * vG + 0.1140f * vB;
             uint8_t gray2 = static_cast<uint8_t>(std::min(255.0f * gray, 255.0f));
-            epd_draw_pixel(mSample.x, mSample.y, gray, mImageRenderingFramebuffer);
+
+            //uint8_t gray2 = (uint8_t)((vR + vG + vB) / 3.0f * 255);
+
+            epd_draw_pixel(mSample.x, mSample.y, gray2, mImageRenderingFramebuffer);
          } else {
             //epd_draw_pixel(mSample.x, mSample.y, 0, mImageRenderingFramebuffer);
          }
@@ -104,9 +107,9 @@ void PlayState::update()
    //Serial.println("Done with row!");
 
    epd_draw_grayscale_image(epd_full_screen(), mImageRenderingFramebuffer);
-   //delay(1000);
+   delay(1000);
    //memset(mImageRenderingFramebuffer, 0xFF, EPD_WIDTH * EPD_HEIGHT / 2);
-   //epd_clear();
+   epd_clear();
    epd_poweroff();
 }
 
