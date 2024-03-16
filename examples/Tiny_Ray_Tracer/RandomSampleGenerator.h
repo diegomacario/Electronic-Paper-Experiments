@@ -38,10 +38,8 @@ private:
    // Number of pixels = Number of samples = width * height
    unsigned int width, height;
 
-   std::vector<int> xCoordinates;
-   std::vector<int> yCoordinates;
-   std::vector<int>::iterator currentXCoordinate;
-   std::vector<int>::iterator currentYCoordinate;
+   std::vector<int> linearPixelCoordinates;
+   std::vector<int>::iterator currentLinearPixelCoordinate;
 
    unsigned int numSamplesGenerated;
 };

@@ -88,7 +88,7 @@ void PlayState::update()
       }
    } else if (mGenerateNoiseOfQuadrants) {
       if (mQuadrantIndex <= 3) {
-         generateNoise(mQuadrantIndex);
+         //generateNoise(mQuadrantIndex);
 
          if (mQuadrantIndex == 3) {
             mGenerateNoiseOfQuadrants = false;
@@ -103,6 +103,7 @@ void PlayState::update()
    epd_poweron();
 
    if (done) {
+      printf("Done!");
       epd_draw_grayscale_image(epd_full_screen(), mImageRenderingFramebuffer);
       delay(5000);
       epd_clear();
@@ -110,10 +111,12 @@ void PlayState::update()
       return;
    }
 
-   for (int i = 0; i < 960; ++i) {
+   for (int i = 0; i < 960 * 10; ++i) {
       if (mSampleGenerator.sampleIsAvailable())
       {
          mSampleGenerator.generateSample(mSample);
+         //std::cout << "X: " << mSample.x << '\n';
+         //std::cout << "Y: " << mSample.y << '\n';
          mRayGenerator.generateRay(mSample, mRay);
 
          // If the current ray intersects an object, we calculate the lighting at the intersection point and store the colour
@@ -139,7 +142,7 @@ void PlayState::update()
 
             epd_draw_pixel(mSample.x, mSample.y, gray2, mImageRenderingFramebuffer);
          } else {
-            //epd_draw_pixel(mSample.x, mSample.y, 0, mImageRenderingFramebuffer);
+            epd_draw_pixel(mSample.x, mSample.y, 0, mImageRenderingFramebuffer);
          }
       } else {
          done = true;
@@ -148,7 +151,7 @@ void PlayState::update()
 
    //Serial.println("Done with row!");
 
-   //epd_draw_grayscale_image(epd_full_screen(), mImageRenderingFramebuffer);
+   epd_draw_grayscale_image(epd_full_screen(), mImageRenderingFramebuffer);
    delay(1000);
    //memset(mImageRenderingFramebuffer, 0xFF, EPD_WIDTH * EPD_HEIGHT / 2);
    epd_clear();
