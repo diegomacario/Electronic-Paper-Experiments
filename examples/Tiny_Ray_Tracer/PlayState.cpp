@@ -88,7 +88,7 @@ void PlayState::update()
       }
    } else if (mGenerateNoiseOfQuadrants) {
       if (mQuadrantIndex <= 3) {
-         mSampleGenerator.generateCoordinates(mQuadrantIndex);
+         generateNoise(mQuadrantIndex);
 
          if (mQuadrantIndex == 3) {
             mGenerateNoiseOfQuadrants = false;
