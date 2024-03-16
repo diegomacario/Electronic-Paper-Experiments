@@ -74,11 +74,9 @@ void PlayState::update()
    if (mGenerateCoordinatesOfQuadrants) {
       if (mQuadrantIndex <= 4) {
          if (mQuadrantIndex <= 3) {
-            mSampleGenerator.generateCoordinates(mQuadrantIndex);
             ++mQuadrantIndex;
          }
          else {
-            mSampleGenerator.shuffleCoordinates();
             mQuadrantIndex = 0;
             mGenerateCoordinatesOfQuadrants = false;
             mGenerateNoiseOfQuadrants = true;
@@ -88,7 +86,7 @@ void PlayState::update()
       }
    } else if (mGenerateNoiseOfQuadrants) {
       if (mQuadrantIndex <= 3) {
-         mSampleGenerator.generateCoordinates(mQuadrantIndex);
+         //generateNoise(mQuadrantIndex);
 
          if (mQuadrantIndex == 3) {
             mGenerateNoiseOfQuadrants = false;
@@ -139,7 +137,7 @@ void PlayState::update()
 
             epd_draw_pixel(mSample.x, mSample.y, gray2, mImageRenderingFramebuffer);
          } else {
-            //epd_draw_pixel(mSample.x, mSample.y, 0, mImageRenderingFramebuffer);
+            epd_draw_pixel(mSample.x, mSample.y, 0, mImageRenderingFramebuffer);
          }
       } else {
          done = true;
@@ -148,7 +146,7 @@ void PlayState::update()
 
    //Serial.println("Done with row!");
 
-   //epd_draw_grayscale_image(epd_full_screen(), mImageRenderingFramebuffer);
+   epd_draw_grayscale_image(epd_full_screen(), mImageRenderingFramebuffer);
    delay(1000);
    //memset(mImageRenderingFramebuffer, 0xFF, EPD_WIDTH * EPD_HEIGHT / 2);
    epd_clear();

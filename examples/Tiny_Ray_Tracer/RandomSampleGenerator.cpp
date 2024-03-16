@@ -8,105 +8,75 @@
 RandomSampleGenerator::RandomSampleGenerator()
    : width(0)
    , height(0)
-   , xCoordinates()
-   , yCoordinates()
-   , currentXCoordinate()
-   , currentYCoordinate()
+   , x(0)
+   , y(0)
+   , bit(0)
+   , random(1)
+   , filledPixels()
    , numSamplesGenerated(0)
+   , numRepeatedPixels(0)
 { }
 
 RandomSampleGenerator::RandomSampleGenerator(const int width, const int height)
    : width(width)
    , height(height)
-   , xCoordinates()
-   , yCoordinates()
-   , currentXCoordinate()
-   , currentYCoordinate()
+   , x(0)
+   , y(0)
+   , bit(0)
+   , random(1)
+   , filledPixels()
    , numSamplesGenerated(0)
+   , numRepeatedPixels(0)
 {
-   xCoordinates.reserve(width * height);
-   yCoordinates.reserve(width * height);
+   filledPixels.resize(width * height, false);
 }
 
 RandomSampleGenerator::~RandomSampleGenerator()
 { }
 
-void RandomSampleGenerator::generateCoordinates(int quadrantIndex)
-{
-   int halfWidth = width / 2;
-   int halfHeight = height / 2;
-
-   switch (quadrantIndex) {
-   case 0: // Top left
-      for (int i = 0; i < halfWidth; ++i) {
-         for (int j = 0; j < halfHeight; ++j) {
-            xCoordinates.push_back(i);
-            yCoordinates.push_back(j);
-         }
-      }
-      std::cout << "0 - Generate coordinates of top left quadrant" << '\n';
-      break;
-   case 1: // Top right
-      for (int i = halfWidth; i < width; ++i) {
-         for (int j = 0; j < halfHeight; ++j) {
-            xCoordinates.push_back(i);
-            yCoordinates.push_back(j);
-         }
-      }
-      std::cout << "1 - Generate coordinates of top right quadrant" << '\n';
-      break;
-   case 2: // Bottom left
-      for (int i = 0; i < halfWidth; ++i) {
-         for (int j = halfHeight; j < height; ++j) {
-            xCoordinates.push_back(i);
-            yCoordinates.push_back(j);
-         }
-      }
-      std::cout << "2 - Generate coordinates of bottom left quadrant" << '\n';
-      break;
-   case 3: // Bottom right
-      for (int i = halfWidth; i < width; ++i) {
-         for (int j = halfHeight; j < height; ++j) {
-            xCoordinates.push_back(i);
-            yCoordinates.push_back(j);
-         }
-      }
-      std::cout << "3 - Generate coordinates of bottom right quadrant" << '\n';
-      break;
-   default:
-      break;
-   }
-}
-
-void RandomSampleGenerator::shuffleCoordinates() {
-   std::cout << "Shuffle coordinates" << '\n';
-
-   // Shuffle the pairs
-   //std::random_device rd;
-   //std::mt19937 g(rd());
-   //std::shuffle(coordinates.begin(), coordinates.end(), g);
-
-   // Set the current coordinate to the beginning of the shuffled list
-   currentXCoordinate = xCoordinates.begin();
-   currentYCoordinate = yCoordinates.begin();
-}
-
 void RandomSampleGenerator::generateSample(Sample& sample)
 {
-   // Update sample with the current coordinate
-   sample.x = *currentXCoordinate;
-   sample.y = *currentYCoordinate;
+   int linearPixelPosition = x + (y * width);
 
-   // Move to the next coordinate in the shuffled list
-   ++currentXCoordinate;
-   ++currentYCoordinate;
+   if (filledPixels[linearPixelPosition]) {
+      while (filledPixels[linearPixelPosition]) {
+         bit = ((random >> 0) ^ (random >> 2) ^ (random >> 3) ^ (random >> 5)) & 1;
+         random =  (random >> 1) | (bit << 15);
+         x = random % width;
+         y = random / width;
+         linearPixelPosition = x + (y * width);
+         ++numRepeatedPixels;
+      }
 
-   // Increment the number of samples generated
+      sample.x = x;
+      sample.y = y;
+      filledPixels[linearPixelPosition] = true;
+   } else {
+      sample.x = x;
+      sample.y = y;
+      filledPixels[linearPixelPosition] = true;
+   }
+
+   bit = ((random >> 0) ^ (random >> 2) ^ (random >> 3) ^ (random >> 5)) & 1;
+   random =  (random >> 1) | (bit << 15);
+   x = random % width;
+   y = random / width;
+
    ++numSamplesGenerated;
 }
 
 bool RandomSampleGenerator::sampleIsAvailable()
 {
+   // std::cout << "Num repeated: " << numRepeatedPixels << '\n';
+   // std::cout << "Num samples: " << numSamplesGenerated << '\n';
+   // bool sampleIsAvail = (numSamplesGenerated != (width * height));
+   // if (!sampleIsAvail) {
+   //    if (std::all_of(filledPixels.begin(), filledPixels.end(), [](bool v) { return v; })) {
+   //       printf("All pixels filled!");
+   //    } else {
+   //       printf("Not all pixels filled!");
+   //    }
+   // }
    return (numSamplesGenerated != (width * height));
 }
 
